@@ -163,6 +163,7 @@ class AppGenerator(object):
         for lf in file_map['local_files']:
             file_ext = os.path.splitext(lf[1])[1]
             if file_ext == '.j2':
+                # if it is a .j2 file, render it as jinja2
                 context = {
                     'SECRET_KEY': generate_random_hex(),
                     'APP_NAME': self.app_name
