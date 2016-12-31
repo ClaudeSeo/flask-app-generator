@@ -11,9 +11,13 @@ reqs = [str(ir.req) for ir in install_reqs]
 setup(
     name='flask_app_generator',
     version=__version__,
-    packages=['flask-app-generator'],
-    package_dir={'flask-app-generator': 'src/flask-app-generator'},
+    packages=['flask_app_generator'],
+    package_dir={'flask_app_generator': 'src/flask_app_generator'},
     install_requires=reqs,
+    entry_points={
+        'console_scripts': [
+            'flask-app-generator=flask_app_generator.run:main'],
+    },
     author='Claude.Seo',
     author_email='ehdaudtj@gmail.com',
     url='https://github.com/SeoDongMyeong/flask-app-generator',
