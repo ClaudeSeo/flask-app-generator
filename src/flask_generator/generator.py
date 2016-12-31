@@ -15,7 +15,7 @@ PWD = os.path.dirname(os.path.realpath(__file__))
 APP_TYPES = enum(SIMPLE=1, LARGE=2)
 
 
-def get_file_map(app_type, app_name):
+def get_file_map(app_type):
     '''
     - dirs
     Enter the name of the folder to be created.
@@ -148,7 +148,7 @@ class AppGenerator(object):
         create_virtualenv()
 
     def build_app(self):
-        file_map = get_file_map(self.app_type, self.app_name)
+        file_map = get_file_map(self.app_type)
 
         # create dirs
         for d in file_map['dirs']:
