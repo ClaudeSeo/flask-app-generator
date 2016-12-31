@@ -135,6 +135,12 @@ def render(filename, context):
     return template.render(context)
 
 
+def load_file_data(file_path):
+    with open(file_path, 'r') as fp:
+        file_data = fp.read()
+    return file_data
+
+
 class AppGenerator(object):
     def __init__(self, app_type, app_name):
         self.app_type = app_type
@@ -164,14 +170,9 @@ class AppGenerator(object):
                 data = render(lf[1], context)
             else:
                 path = os.path.join(self.destination_path, lf[1])
-                data = self.load_file_data(path)
+                data = load_file_data(path)
             with open(lf[0], 'w') as fp:
                 fp.write(data)
-
-    def load_file_data(self, file_path):
-        with open(file_path, 'r') as fp:
-            file_data = fp.read()
-        return file_data
 
 
 if __name__ == '__main__':
