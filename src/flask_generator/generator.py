@@ -10,7 +10,7 @@ def enum(**enums):
     return type('Enum', (), enums)
 
 
-PWD = os.getcwd()
+PWD = os.path.dirname(os.path.realpath(__file__))
 APP_TYPES = enum(SIMPLE=1, LARGE=2)
 
 
