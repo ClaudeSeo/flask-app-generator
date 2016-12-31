@@ -62,7 +62,6 @@ def get_file_map(app_type):
                 'app/static/js',
                 'app/static/img',
                 'app/models',
-                'app/api',
                 'app/views'
             ],
             'remote_files': [
@@ -73,14 +72,18 @@ def get_file_map(app_type):
             'local_files': [
                 ('README.md', 'templates/README.md.j2'),
                 ('.gitignore', 'templates/.gitignore'),
+                ('config/__init__.py', 'templates/__init__.py'),
                 ('config/prod.py', 'config/prod.py.j2'),
                 ('config/dev.py', 'config/dev.py.j2'),
                 ('manage.py', 'templates/manage.py'),
                 ('requirements.txt', 'templates/requirements.txt'),
+                ('__init__.py', 'templates/__init__.py'),
+                ('app/__init__.py', 'templates/__init__.py'),
                 ('app/app.py', 'templates/app.py'),
                 ('app/templates/layout.html', 'templates/html/layout.html'),
                 ('app/templates/index.html', 'templates/html/index.html'),
-                ('app/api/__init__.py', 'templates/api/__init__.py')
+                ('app/views/__init__.py', 'templates/views/__init__.py'),
+                ('app/views/index.py', 'templates/views/index.py')
             ]
         }
     else:
