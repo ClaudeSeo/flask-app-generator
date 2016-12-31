@@ -3,6 +3,7 @@ import os
 import requests
 import jinja2
 import exceptions
+import urls
 
 
 def enum(**enums):
@@ -56,19 +57,18 @@ def get_file_map(app_type, app_name):
             'dirs': [
                 'config',
                 'bin',
-                app_name,
-                app_name + '/templates',
-                app_name + '/static/css',
-                app_name + '/static/js',
-                app_name + '/static/img',
-                app_name + '/models',
-                app_name + '/api',
-                app_name + '/views'
+                'app/templates',
+                'app/static/css',
+                'app/static/js',
+                'app/static/img',
+                'app/models',
+                'app/api',
+                'app/views'
             ],
             'remote_files': [
-                ('static/css/bootstrap.min.css', 'URL'),
-                ('static/js/bootstrap.min.js', 'URL'),
-                ('static/js/jquery.min.js', 'URL')
+                ('app/static/css/bootstrap.min.css', urls.BOOTSTRAP_CSS),
+                ('app/static/js/bootstrap.min.js', urls.BOOTSTRAP_JS),
+                ('app/static/js/jquery.min.js', urls.JQUERY_JS)
             ],
             'local_files': [
                 ('README.md', 'templates/README.md.j2'),
@@ -77,12 +77,10 @@ def get_file_map(app_type, app_name):
                 ('config/dev.py', 'config/dev.py.j2'),
                 ('manage.py', 'templates/manage.py'),
                 ('requirements.txt', 'templates/requirements.txt'),
-                (app_name + '/app.py', 'templates/app.py'),
-                (app_name + '/templates/layout.html',
-                 'templates/html/layout.html'),
-                (app_name + '/templates/index.html',
-                 'templates/html/index.html'),
-                (app_name + '/api/__init__.py', 'templates/api/__init__.py')
+                ('app/app.py', 'templates/app.py'),
+                ('app/templates/layout.html', 'templates/html/layout.html'),
+                ('app/templates/index.html', 'templates/html/index.html'),
+                ('app/api/__init__.py', 'templates/api/__init__.py')
             ]
         }
     else:
@@ -95,15 +93,12 @@ def generate_random_hex():
     return os.urandom(24).encode('hex')
 
 
-def download_file(files):
-    for f in files:
-        dest_name = f[0]
-        url = f[1]
-        r = requests.get(url)
-        with open(dest_name, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
+def download_file(dest, url):
+    r = requests.get(url, stream=True)
+    with open(dest, 'wb') as fp:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                fp.write(chunk)
 
 
 def create_virtualenv():
@@ -175,11 +170,18 @@ class AppGenerator(object):
             with open(lf[0], 'w') as fp:
                 fp.write(data)
 
+        # create remote_files
+        for rf in file_map['remote_files']:
+            # print rf
+            dest = os.path.join(self.destination_path, self.app_name, rf[0])
+            url = rf[1]
+            download_file(dest, url)
+
         # install lib
         install_lib_with_virtualenv()
 
 
 if __name__ == '__main__':
-    gen = AppGenerator(APP_TYPES.SIMPLE, 'app')
+    gen = AppGenerator(APP_TYPES.LARGE, 'app')
     gen.init_app()
     gen.build_app()
