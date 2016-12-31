@@ -46,7 +46,8 @@ def get_file_map(app_type):
                 ('README.md', 'templates/README.md.j2'),
                 ('.gitignore', 'templates/.gitignore'),
                 ('config.py', 'config/prod.py.j2'),
-                ('app.py', 'templates/app.py'),
+                ('app.py', 'templates/app_simple.py'),
+                ('__init__.py', 'templates/__init__.py'),
                 ('requirements.txt', 'templates/requirements.txt'),
                 ('templates/layout.html', 'templates/html/layout.html'),
                 ('templates/index.html', 'templates/html/index.html')
@@ -79,7 +80,7 @@ def get_file_map(app_type):
                 ('requirements.txt', 'templates/requirements.txt'),
                 ('__init__.py', 'templates/__init__.py'),
                 ('app/__init__.py', 'templates/__init__.py'),
-                ('app/app.py', 'templates/app.py'),
+                ('app/app.py', 'templates/app_large.py'),
                 ('app/templates/layout.html', 'templates/html/layout.html'),
                 ('app/templates/index.html', 'templates/html/index.html'),
                 ('app/views/__init__.py', 'templates/views/__init__.py'),
@@ -185,6 +186,6 @@ class AppGenerator(object):
 
 
 if __name__ == '__main__':
-    gen = AppGenerator(APP_TYPES.LARGE, 'app')
+    gen = AppGenerator(APP_TYPES.SIMPLE, 'app')
     gen.init_app()
     gen.build_app()
