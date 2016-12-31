@@ -38,9 +38,9 @@ def get_file_map(app_type, app_name):
                 'static/img'
             ],
             'remote_files': [
-                ('static/css/bootstrap.min.css', 'URL'),
-                ('static/js/bootstrap.min.js', 'URL'),
-                ('static/js/jquery.min.js', 'URL')
+                ('static/css/bootstrap.min.css', urls.BOOTSTRAP_CSS),
+                ('static/js/bootstrap.min.js', urls.BOOTSTRAP_JS),
+                ('static/js/jquery.min.js', urls.JQUERY_JS)
             ],
             'local_files': [
                 ('README.md', 'templates/README.md.j2'),
