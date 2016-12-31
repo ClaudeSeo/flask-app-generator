@@ -19,6 +19,7 @@ def main():
     app_name = options.name
 
     if app_type is None and app_name is None:
+        parser.print_help()
         sys.exit()
 
     assert app_type, parser.error('type is required')
