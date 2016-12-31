@@ -10,6 +10,7 @@ def enum(**enums):
     return type('Enum', (), enums)
 
 
+PWD = os.getcwd()
 APP_TYPES = enum(SIMPLE=1, LARGE=2)
 
 
@@ -33,8 +34,7 @@ def get_file_map(app_type, app_name):
                 'templates',
                 'static/css',
                 'static/js',
-                'static/img',
-                'config'
+                'static/img'
             ],
             'remote_files': [
                 ('static/css/bootstrap.min.css', 'URL'),
@@ -42,13 +42,13 @@ def get_file_map(app_type, app_name):
                 ('static/js/jquery.min.js', 'URL')
             ],
             'local_files': [
-                ('README.md', 'README.md'),
-                ('.gitignore', '.gitignore'),
+                ('README.md', 'templates/README.md.j2'),
+                ('.gitignore', 'templates/.gitignore'),
                 ('config.py', 'config/prod.py.j2'),
-                ('app.py', 'app.py'),
-                ('requirements.txt', 'requirements.txt'),
-                ('templates/layout.html', 'templates/layout.html'),
-                ('templates/index.html', 'templates/index.html')
+                ('app.py', 'templates/app.py'),
+                ('requirements.txt', 'templates/requirements.txt'),
+                ('templates/layout.html', 'templates/html/layout.html'),
+                ('templates/index.html', 'templates/html/index.html')
             ]
         }
     elif app_type == APP_TYPES.LARGE:
@@ -71,16 +71,18 @@ def get_file_map(app_type, app_name):
                 ('static/js/jquery.min.js', 'URL')
             ],
             'local_files': [
-                ('README.md', 'README.md'),
-                ('.gitignore', '.gitignore'),
-                ('config/prod.py.j2', 'config/prod.py.j2'),
-                ('config/dev.py.j2', 'config/dev.py.j2'),
-                ('manage.py', 'manage.py'),
-                ('requirements.txt', 'requirements.txt'),
-                (app_name + '/app.py', 'app.py'),
-                (app_name + '/templates/layout.html', 'templates/layout.html'),
-                (app_name + '/templates/index.html', 'templates/index.html'),
-                (app_name + '/api/__init__.py', 'api/__init__.py')
+                ('README.md', 'templates/README.md.j2'),
+                ('.gitignore', 'templates/.gitignore'),
+                ('config/prod.py', 'config/prod.py.j2'),
+                ('config/dev.py', 'config/dev.py.j2'),
+                ('manage.py', 'templates/manage.py'),
+                ('requirements.txt', 'templates/requirements.txt'),
+                (app_name + '/app.py', 'templates/app.py'),
+                (app_name + '/templates/layout.html',
+                 'templates/html/layout.html'),
+                (app_name + '/templates/index.html',
+                 'templates/html/index.html'),
+                (app_name + '/api/__init__.py', 'templates/api/__init__.py')
             ]
         }
     else:
@@ -106,8 +108,12 @@ def download_file(files):
 
 def create_virtualenv():
     # After creating the virtual environment, install the library
-    command = 'virtualenv venv;' \
-              'source venv/bin/activate;' \
+    command = 'virtualenv venv'
+    os.system(command)
+
+
+def install_lib_with_virtualenv():
+    command = 'source venv/bin/activate;' \
               'pip install -r requirements.txt'
     os.system(command)
 
@@ -123,7 +129,7 @@ def configure_git(github_user, github_repo, is_git_push=True):
 
 
 def render(filename, context):
-    loader = jinja2.FileSystemLoader('src/flask_generator')
+    loader = jinja2.FileSystemLoader(PWD)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(filename)
     return template.render(context)
@@ -133,12 +139,42 @@ class AppGenerator(object):
     def __init__(self, app_type, app_name):
         self.app_type = app_type
         self.app_name = app_name
+        self.destination_path = PWD
 
     def init_app(self):
         os.mkdir(self.app_name)
         os.chdir(self.app_name)
         create_virtualenv()
 
+    def build_app(self):
+        file_map = get_file_map(self.app_type, self.app_name)
+
+        # create dirs
+        for d in file_map['dirs']:
+            os.makedirs(d)
+
+        # create local_files
+        for lf in file_map['local_files']:
+            file_ext = os.path.splitext(lf[1])[1]
+            if file_ext == '.j2':
+                context = {
+                    'SECRET_KEY': generate_random_hex(),
+                    'APP_NAME': self.app_name
+                }
+                data = render(lf[1], context)
+            else:
+                path = os.path.join(self.destination_path, lf[1])
+                data = self.load_file_data(path)
+            with open(lf[0], 'w') as fp:
+                fp.write(data)
+
+    def load_file_data(self, file_path):
+        with open(file_path, 'r') as fp:
+            file_data = fp.read()
+        return file_data
+
 
 if __name__ == '__main__':
     gen = AppGenerator(APP_TYPES.SIMPLE, 'app')
+    gen.init_app()
+    gen.build_app()
