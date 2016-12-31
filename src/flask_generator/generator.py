@@ -175,6 +175,9 @@ class AppGenerator(object):
             with open(lf[0], 'w') as fp:
                 fp.write(data)
 
+        # install lib
+        install_lib_with_virtualenv()
+
 
 if __name__ == '__main__':
     gen = AppGenerator(APP_TYPES.SIMPLE, 'app')
