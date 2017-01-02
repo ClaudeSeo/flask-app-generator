@@ -145,6 +145,7 @@ class AppGenerator(object):
         self.app_type = app_type
         self.app_name = app_name
         self.destination_path = PWD
+        self.install_path = os.getcwd()
 
     def init_app(self):
         os.mkdir(self.app_name)
@@ -177,7 +178,7 @@ class AppGenerator(object):
         # create remote_files
         for rf in file_map['remote_files']:
             # print rf
-            dest = os.path.join(self.destination_path, self.app_name, rf[0])
+            dest = os.path.join(self.install_path, self.app_name, rf[0])
             url = rf[1]
             download_file(dest, url)
 
