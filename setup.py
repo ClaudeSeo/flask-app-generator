@@ -13,6 +13,11 @@ setup(
     version=__version__,
     packages=['flask_app_generator'],
     package_dir={'flask_app_generator': 'src/flask_app_generator'},
+    package_data={'': [
+        'config/*', 'templates/*', 'templates/.gitignore',
+        'templates/html/*', 'templates/views/*', 'templates/static'
+    ]},
+    include_package_data=True,
     install_requires=reqs,
     entry_points={
         'console_scripts': [
