@@ -8,7 +8,7 @@ The Flask App Generator allows you to start Flask in seconds.
 $ git clone https://github.com/SeoDongMyeong/flask-app-generator.git
 $ cd flask-app-generator
 $ python setup.py install
-$ flask-app-generator -t SIMPLE -n [APP_NAME]
+$ flask-app-generator -t [SIMPLE | LARGE] -n [APP_NAME]
 ```
 
 ### Required Package
