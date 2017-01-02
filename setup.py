@@ -1,7 +1,7 @@
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup, find_packages
 from pip.req import parse_requirements
 from src.flask_app_generator import __version__
 
@@ -11,17 +11,12 @@ reqs = [str(ir.req) for ir in install_reqs]
 setup(
     name='flask_app_generator',
     version=__version__,
-    packages=['flask_app_generator'],
-    package_dir={'flask_app_generator': 'src/flask_app_generator'},
-    package_data={'': [
-        'config/*', 'templates/*', 'templates/.gitignore',
-        'templates/html/*', 'templates/views/*', 'templates/static'
-    ]},
-    include_package_data=True,
+    packages=find_packages(exclude=['*.pyc']),
     install_requires=reqs,
+    include_package_data=True,
     entry_points={
         'console_scripts': [
-            'flask-app-generator=flask_app_generator.run:main'],
+            'flask-app-generator=src.flask_app_generator.run:main'],
     },
     author='ClaudeSeo',
     author_email='ehdaudtj@gmail.com',
