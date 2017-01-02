@@ -23,7 +23,7 @@ setup(
         'console_scripts': [
             'flask-app-generator=flask_app_generator.run:main'],
     },
-    author='Claude.Seo',
+    author='ClaudeSeo',
     author_email='ehdaudtj@gmail.com',
     url='https://github.com/SeoDongMyeong/flask-app-generator',
     description='Flask Project Generator',
