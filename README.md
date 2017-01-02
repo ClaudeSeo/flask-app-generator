@@ -35,3 +35,8 @@ Automatically creates a flask app
 + -h, --help : Show usage
 + -t, --type : Set the application level. (SIMPLE or LARGE)
 + -n, --name : Application Name
+
+### TBD
+* heroku upload option
+* git upload option
+* jQuery, bootstrap unused option
